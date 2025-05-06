@@ -1,0 +1,14 @@
+{
+  "name": "@hotel-booking-app/eslint-config",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "ESLint config for monorepo",
+  "author": "Abdirahman Haji <abdirahman.haji.13@gmail.com>",
+  "exports": {
+    ".": "./eslint.config.js",
+    "./create-config": "./create-config.js"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^4.12.1"
+  }
+}
