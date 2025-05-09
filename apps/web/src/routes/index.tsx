@@ -42,9 +42,19 @@ function App() {
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <Button className="w-full" variant="outline">
-                        Book
-                      </Button>
+                      <div className="flex flex-col gap-2">
+                        <p className="text-sm text-muted-foreground">
+                          $
+                          {room.price}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          {room.capacity}
+                        </p>
+
+                        <Button className="w-full" variant="outline">
+                          Book
+                        </Button>
+                      </div>
                     </CardContent>
                   </Card>
                 ))
