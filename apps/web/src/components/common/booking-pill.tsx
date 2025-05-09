@@ -30,7 +30,7 @@ export function BookingPill() {
 
   return (
     <div
-      className="flex gap-14 justify-start items-center px-10 py-4 rounded-full bg-background border border-border w-fit"
+      className="flex gap-4 md:gap-14 justify-start items-center px-4 md:px-10 py-4 rounded-full bg-background border border-border w-fit max-w-full overflow-x-auto"
     >
       <Popover>
         <PopoverTrigger asChild>
@@ -42,7 +42,7 @@ export function BookingPill() {
             >
               Check In
             </p>
-            <p className="font-medium">
+            <p className="font-medium w-36">
               {checkInDate.toLocaleDateString('en-US', {
                 month: 'long',
                 day: 'numeric',
@@ -75,7 +75,7 @@ export function BookingPill() {
             >
               Check Out
             </p>
-            <p className="font-medium">
+            <p className="font-medium w-36">
               {checkOutDate.toLocaleDateString('en-US', {
                 month: 'long',
                 day: 'numeric',
@@ -106,7 +106,7 @@ export function BookingPill() {
               >
             Guests
           </p>
-            <p className="font-medium">
+            <p className="font-medium w-20">
               {guests} Guest{guests === 1 ? '' : 's'}
             </p>
           </div>
