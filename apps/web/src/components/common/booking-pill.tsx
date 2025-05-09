@@ -5,6 +5,7 @@ import { useDatePicker } from '@/hooks/use-date-picker';
 
 import { Calendar } from '../ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { add } from 'date-fns';
 
 export function BookingPill() {
   const {
@@ -45,6 +46,8 @@ export function BookingPill() {
             mode="single"
             selected={checkInDate}
             onSelect={handleCheckInDateChange}
+            // Disable dates before today
+            disabled={{ before: new Date() }}
             initialFocus
           />
         </PopoverContent>
@@ -76,6 +79,8 @@ export function BookingPill() {
             mode="single"
             selected={checkOutDate}
             onSelect={handleCheckOutDateChange}
+            // Disable dates before tomorrow
+            disabled={{ before: add(new Date(), { days: 1 }) }}
             initialFocus
           />
         </PopoverContent>
