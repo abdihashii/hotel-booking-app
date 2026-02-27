@@ -5,6 +5,7 @@ import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 
 import { ThemeSync } from '@/components/theme-sync';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts';
 import { queryClient } from '@/lib/query-client';
 import { useThemeStore } from '@/stores/theme-store';
@@ -21,9 +22,11 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeSync />
-      <Outlet />
-      <TanStackRouterDevtools />
+      <TooltipProvider>
+        <ThemeSync />
+        <Outlet />
+        <TanStackRouterDevtools />
+      </TooltipProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
