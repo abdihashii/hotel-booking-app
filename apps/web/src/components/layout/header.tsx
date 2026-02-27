@@ -11,7 +11,9 @@ export function Header({ transparent = false }: { transparent?: boolean }) {
     <header
       className={cn(
         'flex h-16 items-center justify-between px-4 z-10',
-        transparent ? 'bg-transparent' : 'border-b bg-background',
+        transparent
+          ? 'absolute top-0 left-0 right-0 bg-transparent'
+          : 'border-b bg-background',
       )}
     >
       <h1 className="text-2xl font-bold">Hotel Booking App</h1>

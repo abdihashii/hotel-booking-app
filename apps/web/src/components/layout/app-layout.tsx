@@ -9,11 +9,11 @@ export function AppLayout({ children, transparentHeader = false }: {
   transparentHeader?: boolean;
 }) {
   return (
-    <div className="flex h-screen flex-col">
+    <div className={cn('relative', transparentHeader ? 'h-screen' : 'flex h-screen flex-col')}>
       <Header transparent={transparentHeader} />
       <main className={cn(
-        'flex-1 overflow-auto',
-        transparentHeader ? '-mt-16' : 'bg-background px-4 py-6',
+        'overflow-auto',
+        transparentHeader ? 'h-full' : 'flex-1 bg-background px-4 py-6',
       )}>
         {children}
       </main>
