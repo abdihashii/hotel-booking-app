@@ -1,19 +1,34 @@
+import { useMemo } from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 
+import { ThemeSync } from '@/components/theme-sync';
+import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts';
 import { queryClient } from '@/lib/query-client';
-import { ThemeProvider } from '@/providers/theme-provider';
+import { useThemeStore } from '@/stores/theme-store';
 
-export const Route = createRootRoute({
-  component: () => (
+function RootComponent() {
+  const toggleTheme = useThemeStore((s) => s.toggleTheme);
+
+  const shortcuts = useMemo(
+    () => [{ key: 'm', handler: toggleTheme }],
+    [toggleTheme],
+  );
+
+  useKeyboardShortcuts(shortcuts);
+
+  return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <Outlet />
-        <TanStackRouterDevtools />
-      </ThemeProvider>
+      <ThemeSync />
+      <Outlet />
+      <TanStackRouterDevtools />
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
-  ),
+  );
+}
+
+export const Route = createRootRoute({
+  component: RootComponent,
 });

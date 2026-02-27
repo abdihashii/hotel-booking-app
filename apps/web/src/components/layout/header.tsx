@@ -2,10 +2,11 @@ import { MoonIcon, SunIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { useTheme } from '@/providers/theme-provider';
+import { useThemeStore } from '@/stores/theme-store';
 
 export function Header({ transparent = false }: { transparent?: boolean }) {
-  const { theme, setTheme } = useTheme();
+  const theme = useThemeStore((s) => s.theme);
+  const toggleTheme = useThemeStore((s) => s.toggleTheme);
 
   return (
     <header
@@ -20,7 +21,8 @@ export function Header({ transparent = false }: { transparent?: boolean }) {
       <Button
         size="icon"
         variant="ghost"
-        onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+        onClick={toggleTheme}
+        title="Toggle theme (M)"
       >
         {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
       </Button>
