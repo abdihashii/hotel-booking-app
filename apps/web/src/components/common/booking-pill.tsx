@@ -1,5 +1,6 @@
 import { MinusIcon, PlusIcon, SearchIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { differenceInCalendarDays } from 'date-fns';
 
 import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
@@ -29,12 +30,18 @@ function useMediaQuery(query: string) {
   return matches;
 }
 
-function formatDate(date: Date | undefined) {
+function formatDate(date: Date | undefined, otherDate?: Date | undefined) {
   if (!date) return 'Select date';
+  const currentYear = new Date().getFullYear();
+  const dateYear = date.getFullYear();
+  const otherYear = otherDate?.getFullYear();
+  const showYear =
+    dateYear !== currentYear ||
+    (otherYear != null && dateYear !== otherYear);
   return date.toLocaleDateString('en-US', {
-    month: 'long',
+    month: 'short',
     day: 'numeric',
-    year: 'numeric',
+    ...(showYear ? { year: 'numeric' } : {}),
   });
 }
 
@@ -54,6 +61,11 @@ export function BookingPill() {
 
   const isLg = useMediaQuery('(min-width: 1024px)');
 
+  const nights =
+    dateRange.from && dateRange.to
+      ? differenceInCalendarDays(dateRange.to, dateRange.from)
+      : null;
+
   const handleKeyDown =
     (handler: () => void) => (e: React.KeyboardEvent) => {
       if (e.key === 'Enter' || e.key === ' ') {
@@ -63,16 +75,21 @@ export function BookingPill() {
     };
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 md:gap-14 justify-start items-stretch md:items-center px-4 md:px-10 py-4 rounded-lg md:rounded-full bg-background border border-border w-full md:w-fit max-w-full overflow-x-auto">
+    <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-start items-stretch md:items-center px-4 md:px-6 py-4 rounded-lg md:rounded-full bg-background border border-border w-full md:w-fit max-w-full overflow-x-auto">
       {/* Shared date range popover */}
       <Popover open={isCalendarOpen} onOpenChange={handleOpenChange}>
         <PopoverAnchor asChild>
-          <div className="flex flex-col md:flex-row gap-4 md:gap-14 items-stretch md:items-center">
+          <div className="flex flex-col md:flex-row gap-4 md:gap-0 items-stretch md:items-center">
             {/* Check In trigger */}
             <div
               role="button"
               tabIndex={0}
-              className="flex flex-col items-start justify-start hover:cursor-pointer group w-full md:w-auto"
+              className={cn(
+                'flex flex-col items-start justify-start hover:cursor-pointer group w-full md:w-auto md:rounded-full md:px-4 md:py-2 transition-colors duration-200',
+                isCalendarOpen &&
+                  selectionPhase === 'selectingCheckIn' &&
+                  'bg-accent',
+              )}
               onClick={openForCheckIn}
               onKeyDown={handleKeyDown(openForCheckIn)}
             >
@@ -85,21 +102,26 @@ export function BookingPill() {
               >
                 Check In
               </p>
-              <p className="font-medium md:w-36 w-full">
-                {formatDate(dateRange.from)}
+              <p className="font-medium md:min-w-[5.5rem] md:w-auto w-full">
+                {formatDate(dateRange.from, dateRange.to)}
               </p>
             </div>
 
             <Separator
               orientation="vertical"
-              className="bg-border h-auto md:h-8 hidden md:block"
+              className="bg-border h-8 hidden md:block"
             />
 
             {/* Check Out trigger */}
             <div
               role="button"
               tabIndex={0}
-              className="flex flex-col items-start justify-start hover:cursor-pointer group w-full md:w-auto"
+              className={cn(
+                'flex flex-col items-start justify-start hover:cursor-pointer group w-full md:w-auto md:rounded-full md:px-4 md:py-2 transition-colors duration-200',
+                isCalendarOpen &&
+                  selectionPhase === 'selectingCheckOut' &&
+                  'bg-accent',
+              )}
               onClick={openForCheckOut}
               onKeyDown={handleKeyDown(openForCheckOut)}
             >
@@ -112,8 +134,8 @@ export function BookingPill() {
               >
                 Check Out
               </p>
-              <p className="font-medium md:w-36 w-full">
-                {formatDate(dateRange.to)}
+              <p className="font-medium md:min-w-[5.5rem] md:w-auto w-full">
+                {formatDate(dateRange.to, dateRange.from)}
               </p>
             </div>
           </div>
@@ -129,6 +151,12 @@ export function BookingPill() {
                   : selectionPhase === 'selectingCheckOut'
                     ? 'Select check-out date'
                     : 'Select dates'}
+                {nights != null && nights > 0 && (
+                  <span>
+                    {' · '}
+                    {nights} {nights === 1 ? 'night' : 'nights'}
+                  </span>
+                )}
               </p>
               <button
                 type="button"
