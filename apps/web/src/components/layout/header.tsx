@@ -1,14 +1,18 @@
 import { MoonIcon, SunIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import { useTheme } from '@/providers/theme-provider';
 
-export function Header() {
+export function Header({ transparent = false }: { transparent?: boolean }) {
   const { theme, setTheme } = useTheme();
 
   return (
     <header
-      className="flex h-16 items-center justify-between border-b bg-background px-4"
+      className={cn(
+        'flex h-16 items-center justify-between px-4 z-10',
+        transparent ? 'bg-transparent' : 'border-b bg-background',
+      )}
     >
       <h1 className="text-2xl font-bold">Hotel Booking App</h1>
       <Button
